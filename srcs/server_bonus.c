@@ -5,14 +5,14 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: bmoudach <bmoudach@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/12 03:14:47 by bmoudach          #+#    #+#             */
-/*   Updated: 2023/09/12 19:42:52 by bmoudach         ###   ########.fr       */
+/*   Created: 2023/09/12 21:26:37 by bmoudach          #+#    #+#             */
+/*   Updated: 2023/09/12 21:26:38 by bmoudach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minitalk.h"
 
-pid_t serv_pid;
+pid_t	g_serv_pid;
 
 static void	sigint_handler(int sig, siginfo_t *info, void *context)
 {
@@ -22,24 +22,17 @@ static void	sigint_handler(int sig, siginfo_t *info, void *context)
 	pid_t		client_pid;
 
 	client_pid = info->si_pid;
-	(void)context;	
-
+	(void)context;
 	if ((i <= 7) && (sig == SIGUSR2))
-	{
 		c = c + tab[i];
-		i++;
-	}
-	else if (sig == SIGUSR1)
-	{
-		i++;
-	}	
+	i++;
 	if (i == 8)
 	{
 		i = 0;
 		if (c == 0)
 		{
 			kill(client_pid, SIGUSR1);
-			ft_printf("\n\n\033[34;01mPID :\033[00m %d\n", serv_pid);
+			ft_printf("\n\n\033[34;01mPID :\033[00m %d\n", g_serv_pid);
 			return ;
 		}
 		ft_putchar_fd(c, 1);
@@ -47,6 +40,7 @@ static void	sigint_handler(int sig, siginfo_t *info, void *context)
 	}
 	kill(client_pid, SIGUSR2);
 }
+
 void	close_exit(int sig)
 {
 	if (sig)
@@ -55,12 +49,12 @@ void	close_exit(int sig)
 
 int	main(void)
 {
-	struct sigaction act;
-	
+	struct sigaction	act;
+
 	sigemptyset(&act.sa_mask);
 	sigaddset(&act.sa_mask, SIGINT);
-	serv_pid = getpgid(serv_pid);
-	ft_printf("\033[34;01mPID :\033[00m %d\n\n", serv_pid);
+	g_serv_pid = getpgid(g_serv_pid);
+	ft_printf("\033[34;01mPID :\033[00m %d\n\n", g_serv_pid);
 	act.sa_sigaction = sigint_handler;
 	act.sa_flags = SA_SIGINFO;
 	sigaction(SIGUSR1, &act, 0);

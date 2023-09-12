@@ -7,7 +7,7 @@
 
 typedef struct s_client
 {
-	pid_t	serv_pid;
+	pid_t	g_g_serv_pid;
 	char	*msg;
 }			t_client;
 
