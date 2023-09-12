@@ -6,32 +6,32 @@
 /*   By: bmoudach <bmoudach@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/12 03:14:47 by bmoudach          #+#    #+#             */
-/*   Updated: 2023/09/12 04:04:52 by bmoudach         ###   ########.fr       */
+/*   Updated: 2023/09/12 19:22:19 by bmoudach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minitalk.h"
 
+
 static void	sigint_handler(int sig, siginfo_t *info, void *context)
 {
-	static int	tab[8] = {1, 2, 4, 8, 16, 32, 64, 128};;
+	static int	tab[8] = {1, 2, 4, 8, 16, 32, 64, 128};
 	static int	i;
 	static int	c;
 	pid_t		client_pid;
 
 	client_pid = info->si_pid;
-	(void)context;
+	(void)context;	
+
 	if ((i <= 7) && (sig == SIGUSR2))
 	{
 		c = c + tab[i];
 		i++;
-		kill(client_pid, SIGUSR2);
 	}
 	else if (sig == SIGUSR1)
 	{
 		i++;
-		kill(client_pid, SIGUSR2);
-	}
+	}	
 	if (i == 8)
 	{
 		i = 0;
@@ -43,6 +43,7 @@ static void	sigint_handler(int sig, siginfo_t *info, void *context)
 		ft_putchar_fd(c, 1);
 		c = 0;
 	}
+	kill(client_pid, SIGUSR2);
 }
 void	close_exit(int sig)
 {
@@ -66,6 +67,6 @@ int	main(void)
 	sigaction(SIGUSR2, &act, 0);
 	signal(SIGINT, &close_exit);
 	while (1)
-		pause();
+		usleep(10);
 	return (0);
 }

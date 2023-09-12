@@ -31,8 +31,7 @@ static void	send_info(t_client info_client)
 				kill(info_client.serv_pid, SIGUSR1);
 			bit_to_send++;
 			while (!syncro)
-				pause();
-			usleep(100);
+				usleep(10);
 			syncro = 0;
 		}
 		bit_to_send = 0;
