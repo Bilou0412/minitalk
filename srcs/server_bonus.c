@@ -5,17 +5,16 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: bmoudach <bmoudach@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/11 20:11:35 by bmoudach          #+#    #+#             */
-/*   Updated: 2023/09/11 22:49:14y bmoudach         ###   ########.fr       */
+/*   Created: 2023/09/12 03:14:47 by bmoudach          #+#    #+#             */
+/*   Updated: 2023/09/12 03:57:49 by bmoudach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minitalk.h"
-#include <signal.h>
 
 static void	sigint_handler(int sig, siginfo_t *info, void *context)
 {
-	static int	tab[8] = {1, 2, 4, 8, 16, 32, 64, 128};
+	static int	tab[8] = {1, 2, 4, 8, 16, 32, 64, 128};;
 	static int	i;
 	static int	c;
 	pid_t		client_pid;
@@ -26,9 +25,13 @@ static void	sigint_handler(int sig, siginfo_t *info, void *context)
 	{
 		c = c + tab[i];
 		i++;
+		kill(client_pid, SIGUSR2);
 	}
 	else if (sig == SIGUSR1)
+	{
 		i++;
+		kill(client_pid, SIGUSR2);
+	}
 	if (i == 8)
 	{
 		i = 0;
@@ -51,17 +54,18 @@ int	main(void)
 {
 	pid_t serv_pid;
 	struct sigaction act;
-
+	
 	serv_pid = 0;
+	sigemptyset(&act.sa_mask);
+	sigaddset(&act.sa_mask, SIGINT);
 	serv_pid = getpgid(serv_pid);
 	ft_printf("%d\n", serv_pid);
 	act.sa_sigaction = sigint_handler;
 	act.sa_flags = SA_SIGINFO;
+	sigaction(SIGUSR1, &act, 0);
+	sigaction(SIGUSR2, &act, 0);
+	signal(SIGINT, &close_exit);
 	while (1)
-	{
-		sigaction(SIGUSR1, &act, 0);
-		sigaction(SIGUSR2, &act, 0);
 		pause();
-	}
 	return (0);
 }

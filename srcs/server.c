@@ -1,24 +1,13 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   server.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bmoudach <bmoudach@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/24 17:34:59 by bmoudach          #+#    #+#             */
-/*   Updated: 2023/08/25 21:37:26by bmoudach         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #include "../include/minitalk.h"
-#include <signal.h>
 
 static void	sigint_handler(int sig)
 {
-	static int			tab[8] = {1,2,4,8,16,32,64,128};
+	static int	tab[8];
 	static int	i;
 	static int	c;
 
+	tab[8] = {1, 2, 4, 8, 16, 32, 64, 128};
 	if ((i <= 7) && (sig == SIGUSR2))
 	{
 		c = c + tab[i];
@@ -33,9 +22,9 @@ static void	sigint_handler(int sig)
 		c = 0;
 	}
 }
-void close_exit(int sig)
+void	close_exit(int sig)
 {
-	if(sig)
+	if (sig)
 		exit(0);
 }
 
@@ -50,7 +39,7 @@ int	main(void)
 	{
 		signal(SIGUSR1, &sigint_handler);
 		signal(SIGUSR2, &sigint_handler);
-		signal(SIGINT,&close_exit);
+		signal(SIGINT, &close_exit);
 		pause();
 	}
 	return (0);

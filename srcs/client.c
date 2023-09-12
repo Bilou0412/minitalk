@@ -12,7 +12,6 @@
 
 #include "../include/minitalk.h"
 
-
 void	send_info(t_client info_client)
 {
 	static int	i;
@@ -44,5 +43,5 @@ int	main(int argc, char *argv[])
 	info_client.serv_pid = ft_atoi(argv[1]);
 	info_client.msg = argv[2];
 	send_info(info_client);
-	return(0);
+	return (0);
 }
