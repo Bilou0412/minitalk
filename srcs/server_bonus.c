@@ -6,7 +6,7 @@
 /*   By: bmoudach <bmoudach@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/12 03:14:47 by bmoudach          #+#    #+#             */
-/*   Updated: 2023/09/12 03:57:49 by bmoudach         ###   ########.fr       */
+/*   Updated: 2023/09/12 04:04:52 by bmoudach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ int	main(void)
 	sigemptyset(&act.sa_mask);
 	sigaddset(&act.sa_mask, SIGINT);
 	serv_pid = getpgid(serv_pid);
-	ft_printf("%d\n", serv_pid);
+	ft_printf("\033[34;01mPID :\033[00m %d\n", serv_pid);
 	act.sa_sigaction = sigint_handler;
 	act.sa_flags = SA_SIGINFO;
 	sigaction(SIGUSR1, &act, 0);

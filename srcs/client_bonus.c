@@ -70,7 +70,7 @@ int	main(int argc, char *argv[])
 	t_client info_client;
 
 	if (argc != 3)
-		return (0);
+		return (ft_printf("\033[31;01m./client_bonus [PID] [STRING]\033[00m\n"),0);
 	info_client.serv_pid = ft_atoi(argv[1]);
 	info_client.msg = argv[2];
 	signal(SIGUSR1, &action);
