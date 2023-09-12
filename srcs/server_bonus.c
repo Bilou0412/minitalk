@@ -6,12 +6,13 @@
 /*   By: bmoudach <bmoudach@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/12 03:14:47 by bmoudach          #+#    #+#             */
-/*   Updated: 2023/09/12 19:22:19 by bmoudach         ###   ########.fr       */
+/*   Updated: 2023/09/12 19:42:52 by bmoudach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minitalk.h"
 
+pid_t serv_pid;
 
 static void	sigint_handler(int sig, siginfo_t *info, void *context)
 {
@@ -38,6 +39,7 @@ static void	sigint_handler(int sig, siginfo_t *info, void *context)
 		if (c == 0)
 		{
 			kill(client_pid, SIGUSR1);
+			ft_printf("\n\n\033[34;01mPID :\033[00m %d\n", serv_pid);
 			return ;
 		}
 		ft_putchar_fd(c, 1);
@@ -53,14 +55,12 @@ void	close_exit(int sig)
 
 int	main(void)
 {
-	pid_t serv_pid;
 	struct sigaction act;
 	
-	serv_pid = 0;
 	sigemptyset(&act.sa_mask);
 	sigaddset(&act.sa_mask, SIGINT);
 	serv_pid = getpgid(serv_pid);
-	ft_printf("\033[34;01mPID :\033[00m %d\n", serv_pid);
+	ft_printf("\033[34;01mPID :\033[00m %d\n\n", serv_pid);
 	act.sa_sigaction = sigint_handler;
 	act.sa_flags = SA_SIGINFO;
 	sigaction(SIGUSR1, &act, 0);
